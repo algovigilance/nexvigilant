@@ -1,0 +1,169 @@
+/* ============================================================================
+   NexVigilant — Colors & Type
+   The single low-level token sheet. Import this first; everything else builds
+   on these custom properties. Authority: NV-PUB-SPEC-001.
+   ========================================================================== */
+
+@import url('fonts/fonts.css');
+
+:root {
+  /* ---- Brand color tokens (paper & ink) ---------------------------------- */
+  --nv-newsprint:   #FBF8F1; /* page background — warm off-white "paper"      */
+  --nv-press-navy:  #101C34; /* masthead field, headlines, primary ink        */
+  --nv-ink:         #1C1812; /* body text — warm near-black                    */
+  --nv-sepia:       #6B5D45; /* captions, bylines, metadata                    */
+  --nv-rule:        #D8CDB6; /* hairline dividers & column rules               */
+  --nv-accent-red:  #B91C1C; /* Serial Vigilant / satire / "breaking"         */
+  --nv-gold:        #B45309; /* house thread — tagline, drop cap, flourishes   */
+  --nv-signal-blue: #1E3A5F; /* The Signal / analysis                          */
+
+  /* Tints derived from the palette (flat washes, never gradients) */
+  --nv-newsprint-deep: #F4EEE0; /* edition strip / sunk panels                 */
+  --nv-rule-soft:      #E7DFCC; /* faintest hairline                           */
+  --nv-press-navy-90:  rgba(16, 28, 52, 0.90);
+
+  /* ---- Per-mode accent (theming, not three designs) ---------------------- */
+  /* Default = house gold; [data-mode] swaps the accent + a few apparatus bits */
+  --nv-accent:      var(--nv-gold);
+  --nv-accent-ink:  var(--nv-newsprint); /* text that sits on an accent field  */
+
+  /* ---- Type roles -------------------------------------------------------- */
+  --nv-serif: 'Newsreader', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --nv-sans:  'Inter', system-ui, 'Helvetica Neue', Arial, sans-serif;
+  --nv-mono:  'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+  /* ---- Fluid type scale (rem, clamp for headlines) ----------------------- */
+  --nv-fs-masthead: clamp(2.4rem, 6vw, 3rem);
+  --nv-fs-headline: clamp(1.7rem, 4.5vw, 2.1rem);
+  --nv-fs-h2:       clamp(1.25rem, 2.4vw, 1.45rem);
+  --nv-fs-dek:      1.0625rem;   /* ~17px */
+  --nv-fs-body:     1.0625rem;   /* ~17–18px reading size */
+  --nv-fs-pull:     1.2rem;
+  --nv-fs-kicker:   0.7rem;
+  --nv-fs-byline:   0.75rem;
+  --nv-fs-meta:     0.72rem;
+  --nv-fs-score:    1.5rem;
+  --nv-fs-caption:  0.8125rem;
+  --nv-fs-disclaimer: 0.66rem;
+
+  /* ---- Line heights ------------------------------------------------------ */
+  --nv-lh-masthead: 1.0;
+  --nv-lh-headline: 1.12;
+  --nv-lh-dek:      1.45;
+  --nv-lh-body:     1.62;
+  --nv-lh-tight:    1.2;
+
+  /* ---- Tracking ---------------------------------------------------------- */
+  --nv-track-masthead: 0.01em;
+  --nv-track-kicker:   0.16em;
+  --nv-track-label:    0.12em;
+
+  /* ---- Spacing scale (8pt-ish, editorial rhythm) ------------------------- */
+  --nv-space-1: 0.25rem;
+  --nv-space-2: 0.5rem;
+  --nv-space-3: 0.75rem;
+  --nv-space-4: 1rem;
+  --nv-space-5: 1.5rem;
+  --nv-space-6: 2rem;
+  --nv-space-7: 3rem;
+  --nv-space-8: 4rem;
+  --nv-space-9: 6rem;
+
+  /* ---- Measure (line length) --------------------------------------------- */
+  --nv-measure: 34rem;          /* single-column reading measure              */
+  --nv-page-max: 75rem;         /* article shell max width                    */
+
+  /* ---- Hairline weight --------------------------------------------------- */
+  --nv-hair: 1px;
+  --nv-rule-heavy: 3px;
+}
+
+/* ---- Mode themes: only accent + apparatus shift ------------------------- */
+[data-mode="satire"]   { --nv-accent: var(--nv-accent-red); }
+[data-mode="critique"] { --nv-accent: var(--nv-ink); }
+[data-mode="analysis"] { --nv-accent: var(--nv-signal-blue); }
+
+/* ============================================================================
+   Semantic element defaults — real hierarchy, never font-size faking.
+   Scope under .nv so the sheet can be dropped into any page safely.
+   ========================================================================== */
+
+.nv {
+  background: var(--nv-newsprint);
+  color: var(--nv-ink);
+  font-family: var(--nv-serif);
+  font-size: var(--nv-fs-body);
+  line-height: var(--nv-lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+}
+
+.nv h1 {
+  font-family: var(--nv-serif);
+  font-weight: 500;
+  font-size: var(--nv-fs-headline);
+  line-height: var(--nv-lh-headline);
+  color: var(--nv-press-navy);
+  letter-spacing: -0.005em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.nv h2 {
+  font-family: var(--nv-serif);
+  font-weight: 600;
+  font-size: var(--nv-fs-h2);
+  line-height: var(--nv-lh-tight);
+  color: var(--nv-press-navy);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.nv p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.nv .nv-kicker {
+  font-family: var(--nv-sans);
+  font-weight: 500;
+  font-size: var(--nv-fs-kicker);
+  letter-spacing: var(--nv-track-kicker);
+  text-transform: uppercase;
+  color: var(--nv-accent);
+}
+
+.nv .nv-label {
+  font-family: var(--nv-sans);
+  font-weight: 600;
+  font-size: var(--nv-fs-meta);
+  letter-spacing: var(--nv-track-label);
+  text-transform: uppercase;
+  color: var(--nv-sepia);
+}
+
+.nv .nv-dek {
+  font-family: var(--nv-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--nv-fs-dek);
+  line-height: var(--nv-lh-dek);
+  color: var(--nv-sepia);
+}
+
+.nv .nv-mono {
+  font-family: var(--nv-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.nv cite {
+  font-family: var(--nv-sans);
+  font-style: normal;
+  font-size: var(--nv-fs-meta);
+  color: var(--nv-sepia);
+}
+
+.nv a { color: var(--nv-press-navy); text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.nv a:hover { color: var(--nv-accent); }

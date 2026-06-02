@@ -1,0 +1,267 @@
+/* ============================================================================
+   publication.css — Article-page component styles for the NexVigilant kit.
+   Builds on colors_and_type.css tokens. Class-based; React components attach
+   these classes. Editorial layout: edition strip, nameplate, compound rule,
+   two-column justified body, drop cap, pull quotes, byline, footer.
+   ========================================================================== */
+
+/* ---- Demo chrome (NOT part of the publication) ------------------------- */
+.kit-toolbar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--nv-press-navy);
+  color: var(--nv-newsprint);
+  font-family: var(--nv-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+.kit-toolbar .kit-toolbar__label { text-transform: uppercase; letter-spacing: 0.16em; opacity: 0.6; font-weight: 600; }
+.kit-segmented { display: flex; gap: 2px; margin-left: auto; background: rgba(255,255,255,0.08); border-radius: 2px; padding: 2px; }
+.kit-segmented button {
+  appearance: none; border: 0; cursor: pointer;
+  font-family: var(--nv-sans); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7); background: transparent;
+  padding: 0.4rem 0.9rem; border-radius: 2px;
+  transition: background 120ms ease, color 120ms ease;
+}
+.kit-segmented button:hover { color: #fff; }
+.kit-segmented button[aria-pressed="true"] { background: var(--nv-newsprint); color: var(--nv-press-navy); }
+
+/* ---- Article shell ----------------------------------------------------- */
+.nv-page { min-height: 100vh; background: var(--nv-newsprint); padding-bottom: var(--nv-space-9); }
+.nv-shell { max-width: var(--nv-page-max); margin: 0 auto; padding: 0 var(--nv-space-6); }
+
+/* ---- 1. Edition strip --------------------------------------------------- */
+.nv-edition {
+  display: flex; align-items: center; gap: var(--nv-space-4);
+  padding: var(--nv-space-3) 0;
+  border-bottom: var(--nv-hair) solid var(--nv-rule);
+  font-family: var(--nv-sans); font-size: var(--nv-fs-meta);
+  color: var(--nv-sepia); letter-spacing: 0.04em;
+}
+.nv-edition__meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; align-items: baseline; }
+.nv-edition__meta span { white-space: nowrap; }
+.nv-edition__sep { color: var(--nv-rule); }
+.nv-edition__spacer { flex: 1; }
+
+/* ---- 2. Mode badge ------------------------------------------------------ */
+.nv-badge {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  font-family: var(--nv-sans); font-weight: 700;
+  font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--nv-newsprint);
+  background: var(--badge-field, var(--nv-accent));
+  padding: 0.32em 0.7em; border-radius: 1px;
+  line-height: 1;
+}
+.nv-badge--outline {
+  background: transparent; color: var(--nv-sepia);
+  box-shadow: inset 0 0 0 1px var(--nv-rule);
+}
+
+/* ---- 2. Nameplate / masthead ------------------------------------------- */
+.nv-nameplate { text-align: center; padding: var(--nv-space-7) 0 var(--nv-space-5); }
+.nv-nameplate__kicker {
+  font-family: var(--nv-sans); font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.34em; text-transform: uppercase; color: var(--nv-sepia);
+  margin-bottom: var(--nv-space-3);
+}
+.nv-wordmark {
+  font-family: var(--nv-serif); font-weight: 500;
+  font-size: var(--nv-fs-masthead); line-height: var(--nv-lh-masthead);
+  letter-spacing: var(--nv-track-masthead);
+  color: var(--nv-press-navy);
+  margin: 0;
+}
+.nv-wordmark em { font-style: italic; color: var(--nv-accent); font-weight: 500; }
+.nv-nameplate__tagline {
+  font-family: var(--nv-serif); font-style: italic; font-size: 0.95rem;
+  color: var(--nv-gold); margin-top: var(--nv-space-3); letter-spacing: 0.01em;
+}
+/* Serial Vigilant: optional Press-Navy field for tabloid weight */
+.nv-nameplate--flag { background: var(--nv-press-navy); margin-top: var(--nv-space-2); padding: var(--nv-space-6) var(--nv-space-4) var(--nv-space-5); }
+.nv-nameplate--flag .nv-wordmark { color: var(--nv-newsprint); }
+.nv-nameplate--flag .nv-nameplate__kicker { color: rgba(251,248,241,0.65); }
+
+/* ---- 3. Compound rule --------------------------------------------------- */
+.nv-compound-rule { margin: 0 0 var(--nv-space-6); }
+.nv-compound-rule__accent { height: var(--nv-rule-heavy); background: var(--nv-accent); }
+.nv-compound-rule__hair { height: var(--nv-hair); background: var(--nv-rule); margin-top: 3px; }
+
+/* ---- 4–6. Article header (kicker / headline / dek) --------------------- */
+.nv-article-header { max-width: 52rem; margin: 0 auto var(--nv-space-5); text-align: center; }
+.nv-article-header .nv-kicker { display: inline-block; margin-bottom: var(--nv-space-4); }
+.nv-article-header .nv-kicker .nv-kicker__sub { color: var(--nv-sepia); }
+.nv-article-header h1 { margin-bottom: var(--nv-space-4); }
+.nv-article-header .nv-dek { max-width: 40rem; margin: 0 auto; }
+
+/* ---- 7. Byline ---------------------------------------------------------- */
+.nv-byline {
+  display: flex; align-items: center; gap: var(--nv-space-4);
+  max-width: 52rem; margin: 0 auto var(--nv-space-6);
+  padding: var(--nv-space-4) 0;
+  border-top: var(--nv-hair) solid var(--nv-rule);
+  border-bottom: var(--nv-hair) solid var(--nv-rule);
+}
+.nv-hedcut {
+  width: 56px; height: 56px; flex: none; border-radius: 50%;
+  background: var(--nv-newsprint-deep);
+  box-shadow: inset 0 0 0 1px var(--nv-rule);
+  object-fit: cover; object-position: top center;
+}
+.nv-byline__text { font-family: var(--nv-sans); font-size: var(--nv-fs-byline); color: var(--nv-sepia); line-height: 1.5; }
+.nv-byline__name { color: var(--nv-ink); font-weight: 600; }
+.nv-byline__name .nv-byline__creds { color: var(--nv-sepia); font-weight: 400; }
+.nv-byline__role { display: block; }
+.nv-byline__date { display: block; color: var(--nv-sepia); }
+.nv-byline__spacer { flex: 1; }
+
+/* ---- 8. Body: two-column justified, drop cap --------------------------- */
+.nv-body {
+  max-width: 60rem; margin: 0 auto;
+  font-family: var(--nv-serif); font-size: var(--nv-fs-body);
+  line-height: var(--nv-lh-body); color: var(--nv-ink);
+  columns: 2; column-gap: var(--nv-space-7);
+  column-rule: var(--nv-hair) solid var(--nv-rule);
+  text-align: justify; hyphens: auto;
+}
+.nv-body > p { margin: 0 0 var(--nv-space-4); text-indent: 0; }
+.nv-body > p + p { text-indent: 1.2em; }
+.nv-body > p.nv-no-indent + p { text-indent: 0; }
+/* drop cap on the first paragraph */
+.nv-body > p:first-of-type::first-letter {
+  font-family: var(--nv-serif); font-weight: 500;
+  float: left; font-size: 3.8em; line-height: 0.82;
+  padding: 0.04em 0.08em 0 0; margin-right: 0.02em;
+  color: var(--nv-accent);
+}
+.nv-body h2 {
+  column-span: all; text-align: left;
+  margin: var(--nv-space-5) 0 var(--nv-space-3);
+  padding-top: var(--nv-space-4);
+  border-top: var(--nv-hair) solid var(--nv-rule);
+}
+
+/* ---- 9a. Editorial pull quote ------------------------------------------ */
+.nv-pullquote {
+  column-span: all; margin: var(--nv-space-6) auto; max-width: 40rem;
+  text-align: center; padding: var(--nv-space-4) 0;
+}
+.nv-pullquote blockquote {
+  margin: 0; font-family: var(--nv-serif); font-weight: 500; font-style: italic;
+  font-size: var(--nv-fs-pull); line-height: 1.3; color: var(--nv-press-navy);
+  text-align: center; text-indent: 0;
+}
+.nv-pullquote blockquote::before { content: "\201C"; color: var(--nv-accent); }
+.nv-pullquote blockquote::after  { content: "\201D"; color: var(--nv-accent); }
+.nv-pullquote figcaption {
+  font-family: var(--nv-sans); font-size: var(--nv-fs-meta); color: var(--nv-sepia);
+  margin-top: var(--nv-space-3); letter-spacing: 0.02em;
+}
+.nv-pullquote figcaption::before { content: "\2014\00A0"; }
+.nv-pullquote__rule { width: 2.5rem; height: 2px; background: var(--nv-accent); margin: 0 auto var(--nv-space-4); }
+
+/* ---- 9b. Evidentiary pull quote (the unit of scrutiny) ----------------- */
+.nv-evidence {
+  column-span: all; margin: var(--nv-space-6) auto; max-width: 42rem;
+  text-align: left; padding: var(--nv-space-5);
+  background: #fff;
+  border: var(--nv-hair) solid var(--nv-rule);
+  border-left: var(--nv-rule-heavy) solid var(--nv-accent);
+}
+/* critique mode: the heavy black "warning box" around the claim */
+[data-mode="critique"] .nv-evidence {
+  border: 2px solid var(--nv-ink);
+  border-left: 8px solid var(--nv-ink);
+}
+.nv-evidence__label {
+  font-family: var(--nv-sans); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--nv-accent);
+  margin-bottom: var(--nv-space-3);
+}
+.nv-evidence blockquote {
+  margin: 0 0 var(--nv-space-3); font-family: var(--nv-serif); font-style: italic;
+  font-weight: 500; font-size: 1.15rem; line-height: 1.4; color: var(--nv-press-navy);
+  text-indent: 0; text-align: left;
+}
+.nv-evidence cite {
+  display: block; margin-bottom: var(--nv-space-4);
+}
+.nv-evidence__scores {
+  display: flex; flex-wrap: wrap; gap: var(--nv-space-5);
+  padding-top: var(--nv-space-4); border-top: var(--nv-hair) solid var(--nv-rule);
+}
+.nv-score { display: flex; flex-direction: column; gap: 2px; }
+.nv-score__value {
+  font-family: var(--nv-mono); font-weight: 500; font-size: var(--nv-fs-score);
+  color: var(--nv-press-navy); line-height: 1; font-variant-numeric: tabular-nums;
+}
+.nv-score__value .nv-score__max { font-size: 0.8rem; color: var(--nv-sepia); }
+.nv-score__label {
+  font-family: var(--nv-sans); font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--nv-sepia);
+}
+.nv-evidence__tags { display: flex; flex-wrap: wrap; gap: var(--nv-space-2); margin-left: auto; align-self: flex-end; }
+.nv-tag {
+  font-family: var(--nv-sans); font-size: 0.64rem; font-weight: 600;
+  letter-spacing: 0.06em; color: var(--nv-ink);
+  padding: 0.28em 0.6em; border-radius: 1px;
+  box-shadow: inset 0 0 0 1px var(--nv-rule); background: var(--nv-newsprint);
+  white-space: nowrap;
+}
+
+/* ---- 10. Figure --------------------------------------------------------- */
+.nv-figure { column-span: all; margin: var(--nv-space-6) auto; max-width: 48rem; }
+.nv-figure img { width: 100%; height: auto; display: block; background: var(--nv-newsprint-deep); }
+.nv-figure figcaption {
+  font-family: var(--nv-sans); font-size: var(--nv-fs-caption); color: var(--nv-sepia);
+  margin-top: var(--nv-space-3); line-height: 1.45; padding-left: var(--nv-space-3);
+  border-left: 2px solid var(--nv-rule);
+}
+
+/* ---- 11. Footer --------------------------------------------------------- */
+.nv-footer {
+  max-width: 52rem; margin: var(--nv-space-8) auto 0; padding-top: var(--nv-space-5);
+  border-top: var(--nv-rule-heavy) double var(--nv-rule);
+  text-align: center;
+}
+.nv-footer__house { font-family: var(--nv-serif); font-weight: 500; font-size: 1.1rem; color: var(--nv-press-navy); }
+.nv-footer__tagline { font-family: var(--nv-serif); font-style: italic; color: var(--nv-gold); margin-top: var(--nv-space-2); }
+.nv-footer__meta {
+  font-family: var(--nv-mono); font-size: 0.7rem; color: var(--nv-sepia);
+  margin-top: var(--nv-space-4); letter-spacing: 0.02em;
+}
+.nv-footer__disclaimer {
+  font-family: var(--nv-sans); font-style: italic; font-size: var(--nv-fs-disclaimer);
+  color: var(--nv-sepia); max-width: 36rem; margin: var(--nv-space-4) auto 0; line-height: 1.5;
+}
+
+/* ---- 12. Related rail --------------------------------------------------- */
+.nv-related { max-width: var(--nv-page-max); margin: var(--nv-space-8) auto 0; padding-top: var(--nv-space-5); border-top: var(--nv-hair) solid var(--nv-rule); }
+.nv-related__title { font-family: var(--nv-sans); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--nv-sepia); margin-bottom: var(--nv-space-4); }
+.nv-related__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--nv-space-6); }
+.nv-related__item { border-top: 2px solid var(--nv-accent); padding-top: var(--nv-space-3); }
+.nv-related__kicker { font-family: var(--nv-sans); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--nv-accent); }
+.nv-related__head { font-family: var(--nv-serif); font-size: 1.05rem; font-weight: 500; line-height: 1.25; color: var(--nv-press-navy); margin-top: var(--nv-space-2); }
+.nv-related__item:hover .nv-related__head { color: var(--nv-accent); }
+
+/* ============================================================================
+   Responsive (NV-PUB-SPEC-001 §5)
+   ========================================================================== */
+@media (max-width: 1023px) {
+  .nv-body { columns: 1; text-align: left; hyphens: manual; max-width: var(--nv-measure); }
+  .nv-body > p + p { text-indent: 0; }
+  .nv-body > p { margin-bottom: var(--nv-space-4); }
+  .nv-related__grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 719px) {
+  .nv-shell { padding: 0 var(--nv-space-4); }
+  .nv-nameplate { padding: var(--nv-space-5) 0 var(--nv-space-4); }
+  .nv-edition { flex-wrap: wrap; gap: var(--nv-space-2); }
+  .nv-evidence__scores { gap: var(--nv-space-4); }
+  .nv-evidence__tags { margin-left: 0; align-self: flex-start; }
+  .nv-related__grid { grid-template-columns: 1fr; }
+  .nv-body > p:first-of-type::first-letter { font-size: 3em; }
+}

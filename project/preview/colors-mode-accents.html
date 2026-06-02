@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/><title>Per-mode accent</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;background:var(--nv-newsprint);}
+  .card{box-sizing:border-box;width:700px;padding:26px 30px;background:var(--nv-newsprint);color:var(--nv-ink);}
+  .card *{box-sizing:border-box;}
+  .row{display:flex;gap:14px;flex-wrap:wrap;align-items:stretch;}
+  .swatch{flex:1;min-width:0;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(28,24,18,.12);}
+  .sw-meta{font-family:var(--nv-sans);font-size:11px;line-height:1.45;margin-top:8px;}
+  .sw-name{font-weight:600;color:var(--nv-ink);letter-spacing:.02em;}
+  .sw-hex{font-family:var(--nv-mono);font-size:10.5px;color:var(--nv-sepia);text-transform:uppercase;}
+  .sw-role{color:var(--nv-sepia);}
+  .lbl{font-family:var(--nv-sans);font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--nv-sepia);}
+  
+  .mode{flex:1;border:1px solid var(--nv-rule);background:#fff;}
+  .mode .bar{height:6px}
+  .mode .body{padding:12px 14px;}
+  .mode .nm{font-family:var(--nv-serif);font-size:18px;color:var(--nv-press-navy)}
+  .mode .nm em{font-style:italic}
+  .badge{display:inline-block;font-family:var(--nv-sans);font-weight:700;font-size:10px;letter-spacing:.16em;color:#FBF8F1;padding:4px 8px;border-radius:1px;margin-bottom:8px}
+
+</style></head><body class="nv"><div class="card"><div class="lbl" style="margin-bottom:16px">Mode = theming. One system, accent swaps.</div>
+  <div class="row">
+    <div class="mode"><div class="bar" style="background:#B91C1C"></div><div class="body"><span class="badge" style="background:#B91C1C">SATIRE</span><div class="nm">The Serial <em style="color:#B91C1C">Vigilant</em></div></div></div>
+    <div class="mode"><div class="bar" style="background:#1C1812"></div><div class="body"><span class="badge" style="background:#1C1812">CRITIQUE</span><div class="nm">The Black <em style="color:#1C1812">Box</em></div></div></div>
+    <div class="mode"><div class="bar" style="background:#1E3A5F"></div><div class="body"><span class="badge" style="background:#1E3A5F">ANALYSIS</span><div class="nm">The <em style="color:#1E3A5F">Signal</em></div></div></div>
+  </div></div></body></html>
