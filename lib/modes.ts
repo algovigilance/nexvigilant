@@ -27,6 +27,10 @@ export interface Author {
 export interface ScoreItem {
   label: string
   value: number
+  // SPEC-001 §4.b/§8: a score never renders as a naked number — its derivation
+  // must be visible. One-line reasoning per dimension.
+  // TODO(SPEC-003): values + reasoning are illustrative until the scoring rubric lands.
+  reasoning: string
 }
 
 export type PullData =
@@ -128,7 +132,7 @@ export const NV_ARTICLES: Record<Mode, Article> = {
     section: 'Clinical Evidence',
     subtag: 'Oncology',
     headline:
-      'Does the new GLP-pathway oncology claim hold up? The trial data tells a narrower story',
+      'Does the new oncology drug’s survival claim hold up? The trial data tells a narrower story',
     dek:
       'A widely shared press release credits the compound with a “40% survival benefit.” We trace the figure to its source table and find a relative reduction in a secondary endpoint, measured against a comparator arm few clinicians would choose.',
     issueNo: '0096',
@@ -158,8 +162,18 @@ export const NV_ARTICLES: Record<Mode, Article> = {
       claim: 'A 40% survival benefit in patients treated with the investigational therapy.',
       cite: 'Veridian Oncology, press release, May 19 2026',
       scores: [
-        { label: 'Evidence quality', value: 58 },
-        { label: 'Source credibility', value: 41 },
+        {
+          label: 'Evidence quality',
+          value: 58,
+          reasoning:
+            'Real effect on a secondary endpoint (progression-free, not overall survival); modest in absolute terms — 8.1 vs 5.9 months.',
+        },
+        {
+          label: 'Source credibility',
+          value: 41,
+          reasoning:
+            'Sponsor press release, not peer-reviewed; comparator arm below the current first-line standard.',
+        },
       ],
       tags: ['Secondary endpoint', 'Weak comparator'],
     },
@@ -198,8 +212,18 @@ export const NV_ARTICLES: Record<Mode, Article> = {
       claim: 'Clinically proven to improve energy and focus in just eight weeks.*',
       cite: 'Product landing page, asterisk linking to manufacturer-funded study',
       scores: [
-        { label: 'Evidence quality', value: 19 },
-        { label: 'Source credibility', value: 27 },
+        {
+          label: 'Evidence quality',
+          value: 19,
+          reasoning:
+            'Open-label, n=22, self-reported primary outcome, no control arm — placebo response indistinguishable from effect.',
+        },
+        {
+          label: 'Source credibility',
+          value: 27,
+          reasoning:
+            'Manufacturer-funded, no independent replication; regulatory non-evaluation disclosed only in fine print.',
+        },
       ],
       tags: ['Open-label', 'Conflict of interest'],
     },

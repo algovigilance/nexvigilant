@@ -41,6 +41,15 @@ export default function ArticlePage({
 
   return (
     <div className="nv nv-page" data-mode={mode}>
+      {/*
+        TODO(SPEC-005): emit JSON-LD here per §6 structured-data table —
+        satire → NewsArticle + satire:true honesty fields;
+        critique → OpinionNewsArticle + ClaimReview per evidentiary quote;
+        analysis → AnalysisNewsArticle + ClaimReview (reviewRating = Evidence
+        Quality, bestRating 100 / worstRating 0; source credibility annotated
+        separately). Blocked on NV-PUB-SPEC-005 (mapping not yet provided).
+        <script type="application/ld+json" /> goes here.
+      */}
       <ModeNav current={mode} />
 
       <div className="nv-shell">
