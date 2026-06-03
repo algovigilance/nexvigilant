@@ -11,8 +11,8 @@ brand spec, content fundamentals, and visual foundations).
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000  → redirects to /satire
-npm run build    # static export of all three mode routes
+npm run dev      # http://localhost:3000  → The Vigilant Press cover (front page)
+npm run build    # static front page + all three mode routes
 ```
 
 ## Routes
@@ -27,14 +27,15 @@ disclaimer change per mode.
 | `/critique` | The Black Box | Ink `#1C1812` (heavy 8px warning box) | Evidentiary (claim + cite + scorecard) |
 | `/analysis` | The Signal | Signal Blue `#1E3A5F` | Evidentiary (claim + cite + scorecard) |
 
-`/` redirects to `/satire`. Each route is statically generated via `generateStaticParams`.
+`/` is the **The Vigilant Press cover** (front page) surfacing the three imprint sections;
+the mode routes are statically generated via `generateStaticParams`.
 
 ## Structure
 
 ```
 app/
   layout.tsx          # root html/body, imports globals.css
-  page.tsx            # redirect to /satire
+  page.tsx            # The Vigilant Press cover (front page) + WebSite JSON-LD
   [mode]/page.tsx     # the article page — validates mode, composes all components
 components/
   masthead.tsx        # ModeBadge, ModeNav, EditionStrip, Nameplate, CompoundRule
