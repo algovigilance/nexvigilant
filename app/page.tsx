@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { HOUSE, MODE_ORDER } from '@/lib/modes'
 import { FrontMasthead, ImprintSection } from '@/components/front'
+import { buildSiteLd, serializeJsonLd } from '@/lib/jsonld'
 
 export const metadata: Metadata = {
   title: HOUSE.wordmark,
@@ -13,6 +14,12 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="nv nv-front">
+      {/* SPEC-005 §5: a single minimal WebSite node — no CollectionPage/ItemList
+          until a real article index with stable URLs exists. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildSiteLd()) }}
+      />
       <div className="nv-shell">
         <FrontMasthead />
       </div>

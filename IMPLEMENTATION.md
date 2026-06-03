@@ -74,11 +74,15 @@ tailwind.config.ts    # brand colors + type roles exposed as Tailwind tokens
   (`scoreBand`) so the two cannot drift. Per v1.1, a registration record / conference
   abstract is a *secondary report* (B1 cap 15, not the preprint cap) — the analysis
   scorecard reflects this — and conflict-of-interest is a source-credibility finding
-  shown in the source annotation, never a §6 fallacy tag. The JSON-LD / ClaimReview mapping
-  (NV-PUB-SPEC-005) is **still pending** — no structured data is emitted yet; wire
-  `<script type="application/ld+json">` into `[mode]/page.tsx` when that spec lands
-  (SPEC-003 §9 maps Evidence Quality → `reviewRating`, source credibility a separate
-  annotation, but the mapping itself is SPEC-005).
+  shown in the source annotation, never a §6 fallacy tag.
+- **Structured data is emitted per NV-PUB-SPEC-005 (v1.0).** Each page server-renders one
+  `<script type="application/ld+json">` built by `lib/jsonld.ts` from `NV_MODES`/`NV_ARTICLES`
+  (no hand-authored JSON-LD). Satire → `Article` + `genre:"Satire"` (never `NewsArticle`, zero
+  `ClaimReview`); critique → `OpinionNewsArticle` and analysis → `AnalysisNewsArticle`, each with
+  one `ClaimReview` whose `reviewRating` is the on-page **gated Evidence Quality** score (band as
+  `alternateName`); source credibility is not folded in (§4/§7.3, on-page only). `/` emits a single
+  minimal `WebSite` node — no `CollectionPage`/`ItemList` until a real article index exists (§5/§7.1).
+  Author `Person.url` is omitted until `/author/{slug}` pages exist (§7.2).
 - **Hedcuts** are the procedurally generated stipple marks from the handoff; replace
   with real author portraits in production.
 - **Inline figures** ship as flat placeholders (`ArticleFigure`) — supply real editorial

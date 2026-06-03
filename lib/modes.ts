@@ -301,6 +301,10 @@ export const HOUSE = {
   wordmark: 'The Vigilant Press',
   tagline: 'Empowerment Through Vigilance',
   credit: 'A NexVigilant publication',
+  // SPEC-005 §1: the legal publisher entity and the canonical site URL. The brand
+  // shown to readers is `wordmark`; `publisher` is the Organization legal name.
+  publisher: 'NexVigilant, LLC',
+  url: 'https://www.thevigilantpress.com',
 }
 
 // Canonical imprint order for the cover (satire → critique → analysis).
