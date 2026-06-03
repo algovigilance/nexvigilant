@@ -27,6 +27,9 @@ export interface JsonLdDoc {
   '@graph': JsonLdNode[]
 }
 
+const articleUrl = (mode: Mode, slug: string) => `${HOUSE.url}/${mode}/${slug}`
+const modeIndexUrl = (mode: Mode) => `${HOUSE.url}/${mode}`
+
 // SPEC-005 §1: the publisher Organization, emitted on every page. `brand` is the
 // reader-facing masthead; `name` is the legal entity. Sourced from HOUSE.
 function organization(): JsonLdNode {
@@ -48,8 +51,6 @@ function author(article: Article): JsonLdNode {
   }
 }
 
-const articleUrl = (mode: Mode) => `${HOUSE.url}/${mode}`
-
 // SPEC-003 §1/§9: Evidence Quality (the gated B-score) is the only score that becomes
 // ClaimReview.reviewRating. Source credibility is never folded in. The builder and the
 // on-page scorecard read the SAME ScoreItem, so the rating cannot diverge from the
@@ -62,13 +63,14 @@ export function evidenceQualityScore(pull: PullData): ScoreItem | undefined {
 
 // SPEC-005 §4: one ClaimReview per evidentiary pull. reviewRating = gated Evidence
 // Quality, bestRating 100 / worstRating 0, alternateName = band label.
-function claimReview(mode: Mode, pull: PullData): JsonLdNode | null {
+function claimReview(mode: Mode, article: Article): JsonLdNode | null {
+  const pull = article.pull
   if (pull.kind !== 'evidentiary') return null
   const score = evidenceQualityScore(pull)
   if (!score) return null
   return {
     '@type': 'ClaimReview',
-    url: `${articleUrl(mode)}#claim-1`,
+    url: `${articleUrl(mode, article.slug)}#claim-1`,
     claimReviewed: pull.claim,
     itemReviewed: {
       '@type': 'CreativeWork',
@@ -90,6 +92,7 @@ function claimReview(mode: Mode, pull: PullData): JsonLdNode | null {
 // ClaimReview nodes and is never a NewsArticle.
 export function buildArticleLd(mode: Mode, article: Article): JsonLdDoc {
   const cfg = NV_MODES[mode]
+  const url = articleUrl(mode, article.slug)
   const node: JsonLdNode = {
     '@type': ARTICLE_TYPE[mode],
     headline: article.headline,
@@ -98,8 +101,8 @@ export function buildArticleLd(mode: Mode, article: Article): JsonLdDoc {
     dateModified: article.dateISO,
     articleSection: article.section,
     inLanguage: 'en',
-    url: articleUrl(mode),
-    mainEntityOfPage: articleUrl(mode),
+    url,
+    mainEntityOfPage: url,
     author: author(article),
     publisher: organization(),
   }
@@ -113,14 +116,38 @@ export function buildArticleLd(mode: Mode, article: Article): JsonLdDoc {
   }
 
   const graph: JsonLdNode[] = [node]
-  const review = claimReview(mode, article.pull)
+  const review = claimReview(mode, article)
   if (review) graph.push(review)
 
   return { '@context': 'https://schema.org', '@graph': graph }
 }
 
-// SPEC-005 §5: the minimal WebSite node for `/`. No CollectionPage / ItemList — that
-// is deferred until a real article index with stable URLs exists (§7.1).
+// SPEC-005 §5/§7.1: a per-mode index is now a real surface with stable article URLs,
+// so the deferred ItemList applies HERE (not on the front page, which stays WebSite
+// only). CollectionPage carries an ItemList of the imprint's articles.
+export function buildModeIndexLd(mode: Mode, articles: Article[]): JsonLdNode {
+  const cfg = NV_MODES[mode]
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${cfg.imprint} — ${HOUSE.wordmark}`,
+    url: modeIndexUrl(mode),
+    isPartOf: { '@type': 'WebSite', name: HOUSE.wordmark, url: HOUSE.url },
+    publisher: organization(),
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: articles.map((a, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: articleUrl(mode, a.slug),
+        name: a.headline,
+      })),
+    },
+  }
+}
+
+// SPEC-005 §5: the minimal WebSite node for `/`. No CollectionPage / ItemList — the
+// front page deliberately stays minimal; the index lives per-mode (buildModeIndexLd).
 export function buildSiteLd(): JsonLdNode {
   return {
     '@context': 'https://schema.org',

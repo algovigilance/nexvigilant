@@ -1,5 +1,5 @@
 import type { Mode, ModeConfig } from '@/lib/modes'
-import { HOUSE, NV_MODES, NV_ARTICLES } from '@/lib/modes'
+import { HOUSE, NV_MODES, featuredArticle } from '@/lib/modes'
 
 // Badge rendered inline (not imported from masthead) so the front page's module
 // graph stays free of next/link — keeps `/` at the zero-client-JS baseline. The
@@ -44,8 +44,9 @@ export function FrontMasthead() {
 // /[mode]. All copy is read from NV_MODES / NV_ARTICLES.
 export function ImprintSection({ mode }: { mode: Mode }) {
   const cfg = NV_MODES[mode]
-  const article = NV_ARTICLES[mode]
-  const href = `/${mode}`
+  const article = featuredArticle(mode)
+  const indexHref = `/${mode}`
+  const articleHref = `/${mode}/${article.slug}`
   return (
     <section className="nv-imprint" data-mode={mode} aria-label={cfg.imprint}>
       <div className="nv-imprint__head">
@@ -59,10 +60,10 @@ export function ImprintSection({ mode }: { mode: Mode }) {
       <article className="nv-teaser">
         <div className="nv-kicker">{article.section}</div>
         <h3 className="nv-teaser__head">
-          <a href={href}>{article.headline}</a>
+          <a href={articleHref}>{article.headline}</a>
         </h3>
         <p className="nv-dek nv-teaser__dek">{article.dek}</p>
-        <a className="nv-teaser__more" href={href}>
+        <a className="nv-teaser__more" href={indexHref}>
           Read in {cfg.imprint} →
         </a>
       </article>

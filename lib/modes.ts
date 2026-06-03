@@ -65,6 +65,7 @@ export type PullData =
   | { kind: 'evidentiary'; claim: string; cite: string; scores: ScoreItem[]; tags: Tag[] }
 
 export interface Article {
+  slug: string
   section: string
   subtag: string
   headline: string
@@ -119,8 +120,10 @@ export const NV_MODES: Record<Mode, ModeConfig> = {
   },
 }
 
-export const NV_ARTICLES: Record<Mode, Article> = {
-  satire: {
+export const NV_ARTICLES: Record<Mode, Article[]> = {
+  satire: [
+    {
+    slug: 'velmora-reliexa-side-effect-drug',
     section: 'Drug Development',
     subtag: 'Pipeline',
     headline:
@@ -154,8 +157,47 @@ export const NV_ARTICLES: Record<Mode, Article> = {
       quote: 'We don’t see side effects. We see an underserved indication.',
       attribution: 'Dale Pruitt, Chief Commercial Officer, Velmora Therapeutics',
     },
-  },
-  analysis: {
+    },
+    {
+      slug: 'aldermere-inertia-placebo-patent',
+      section: 'Market Access',
+      subtag: 'Pricing',
+      headline:
+        'Drugmaker patents a placebo, hails “first therapy with no clinically meaningful side effects”',
+      dek:
+        'Aldermere Biosciences said the inert tablet had matched its own efficacy expectations exactly, and announced a list price commensurate with the breakthrough of asking nothing of the body at all.',
+      issueNo: '0418',
+      vol: 'XII',
+      dateISO: '2026-06-01',
+      dateHuman: 'June 1, 2026',
+      price: 'One tablet · effect not included',
+      author: {
+        name: 'Cornelius P. Hatch',
+        role: 'Markets Correspondent',
+        creds: 'Special to The Serial Vigilant',
+        hedcut: '/assets/hedcut-2.png',
+      },
+      body: [
+        'Aldermere Biosciences on Monday secured a patent for Inertia, a tablet the company confirmed contains no active ingredient, describing it as the first therapy “engineered to do precisely what it promises, which is nothing.”',
+        'At the launch, executives displayed a single slide reading “0 mg” and let it remain on screen for several minutes — a gesture one analyst praised as “the most transparent disclosure the sector has produced.”',
+        'The company said Inertia had met its primary endpoint — being statistically indistinguishable from placebo — with what it called unprecedented consistency. “Our competitors keep failing to beat placebo,” a spokesperson noted. “We set out to tie it, and we delivered.”',
+        'Pricing, executives said, reflects the achievement. A thirty-day supply will launch at roughly the cost of the firm’s leading branded compound, a figure defended on the grounds that “the absence of side effects is itself a feature, and features are not free.”',
+        'The product’s safety section is the longest the company has ever filed. It consists almost entirely of the word “None,” reproduced for regulatory completeness across eleven organ systems and two appendices.',
+        'Patient advocates were cautiously optimistic, observing that Inertia is the first entrant in its class that can be taken indefinitely without harm, indefinitely without benefit, and — most importantly to the company’s model — indefinitely.',
+        'Asked whether a generic would amount to a sugar pill, a spokesperson called the comparison “reductive,” adding that any sugar pill lacking Inertia’s branding and patent estate “simply has not done the work.”',
+        'Aldermere’s next candidate, now in preclinical planning, is understood to be a slightly larger tablet.',
+      ],
+      subhead: 'Priced to reflect the value of doing nothing',
+      pull: {
+        kind: 'satirical',
+        quote: 'We didn’t beat placebo. We partnered with it.',
+        attribution: 'Dr. Felicity Crane, Chief Scientific Officer, Aldermere Biosciences',
+      },
+    },
+  ],
+  analysis: [
+    {
+    slug: 'oncology-survival-claim-trial-data',
     section: 'Clinical Evidence',
     subtag: 'Oncology',
     headline:
@@ -215,8 +257,11 @@ export const NV_ARTICLES: Record<Mode, Article> = {
         },
       ],
     },
-  },
-  critique: {
+    },
+  ],
+  critique: [
+    {
+    slug: 'clinically-proven-supplement',
     section: 'Marketing & Claims',
     subtag: 'Direct-to-consumer',
     headline:
@@ -276,7 +321,8 @@ export const NV_ARTICLES: Record<Mode, Article> = {
         },
       ],
     },
-  },
+    },
+  ],
 }
 
 export const RELATED_ITEMS = [
@@ -309,4 +355,26 @@ export const HOUSE = {
 
 // Canonical imprint order for the cover (satire → critique → analysis).
 export const MODE_ORDER: Mode[] = ['satire', 'critique', 'analysis']
+
+/* ---- Article accessors --------------------------------------------------- */
+// Each mode holds an ordered list of articles; [0] is the featured lead used on the
+// cover teaser and as the imprint's headline piece. Slugs are stable per-article URLs.
+export function getArticles(mode: Mode): Article[] {
+  return NV_ARTICLES[mode]
+}
+
+export function getArticle(mode: Mode, slug: string): Article | undefined {
+  return NV_ARTICLES[mode].find((a) => a.slug === slug)
+}
+
+export function featuredArticle(mode: Mode): Article {
+  return NV_ARTICLES[mode][0]
+}
+
+// Flattened (mode, slug) pairs for generateStaticParams on /[mode]/[slug].
+export function allArticleSlugs(): { mode: Mode; slug: string }[] {
+  return MODE_ORDER.flatMap((mode) =>
+    NV_ARTICLES[mode].map((a) => ({ mode, slug: a.slug })),
+  )
+}
 

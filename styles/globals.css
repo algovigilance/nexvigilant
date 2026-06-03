@@ -458,6 +458,17 @@ html, body { margin: 0; background: var(--nv-newsprint); }
 }
 .nv-teaser__more:hover { text-decoration: underline; text-underline-offset: 3px; }
 
+/* ---- Per-mode index (/[mode]) -------------------------------------------- */
+.nv-index { max-width: 52rem; margin: 0 auto; }
+.nv-index__list { list-style: none; margin: 0; padding: 0; }
+.nv-index__item { padding: var(--nv-space-5) 0; }
+.nv-index__item + .nv-index__item { border-top: var(--nv-hair) solid var(--nv-rule); }
+.nv-index .nv-teaser__head { font-size: 1.55rem; }
+.nv-teaser__byline {
+  font-family: var(--nv-sans); font-size: 0.66rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--nv-sepia);
+}
+
 /* three imprint columns on wide viewports; stacked single column below */
 @media (min-width: 1024px) {
   .nv-front__grid { grid-template-columns: repeat(3, 1fr); gap: var(--nv-space-6); }
