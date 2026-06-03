@@ -67,10 +67,15 @@ tailwind.config.ts    # brand colors + type roles exposed as Tailwind tokens
 
 ## Notes & deferred items (carried from the design handoff)
 
-- **Scores are illustrative.** The scoring rubric (NV-PUB-SPEC-003) and JSON-LD /
-  ClaimReview mapping (NV-PUB-SPEC-005) were not provided, so no structured data is
-  emitted yet. Wire `<script type="application/ld+json">` into `[mode]/page.tsx` when
-  those specs land.
+- **Scores are calibrated to NV-PUB-SPEC-003 (v1.0).** Each evidentiary score renders
+  with its band (§5) and one-line derivation (§G1 no naked numbers); reasoning names the
+  §4 verifiability gate where it applies; tags are drawn from the §6 controlled
+  bias/fallacy vocabulary, each with its trigger. Band is derived from the value
+  (`scoreBand`) so the two cannot drift. The JSON-LD / ClaimReview mapping
+  (NV-PUB-SPEC-005) is **still pending** — no structured data is emitted yet; wire
+  `<script type="application/ld+json">` into `[mode]/page.tsx` when that spec lands
+  (SPEC-003 §9 maps Evidence Quality → `reviewRating`, source credibility a separate
+  annotation, but the mapping itself is SPEC-005).
 - **Hedcuts** are the procedurally generated stipple marks from the handoff; replace
   with real author portraits in production.
 - **Inline figures** ship as flat placeholders (`ArticleFigure`) — supply real editorial
