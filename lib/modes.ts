@@ -244,3 +244,16 @@ export const RELATED_ITEMS = [
     head: 'The footnote economy: how disclaimers became the load-bearing wall of wellness ads',
   },
 ]
+
+/* ---- House cover (front page) -------------------------------------------- */
+// The umbrella over the three imprints (SPEC-001 §2). Single source of truth for
+// the cover wordmark — override here, never hardcode in the page.
+export const HOUSE = {
+  wordmark: 'The Vigilant Press',
+  tagline: 'Empowerment Through Vigilance',
+  credit: 'A NexVigilant publication',
+}
+
+// Canonical imprint order for the cover (satire → critique → analysis).
+export const MODE_ORDER: Mode[] = ['satire', 'critique', 'analysis']
+

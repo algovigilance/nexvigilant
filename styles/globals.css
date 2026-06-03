@@ -404,6 +404,56 @@ html, body { margin: 0; background: var(--nv-newsprint); }
   background: var(--nv-accent);
 }
 
+/* ---- Front page (The Vigilant Press cover) -------------------------------- */
+.nv-front { min-height: 100vh; background: var(--nv-newsprint); padding-bottom: var(--nv-space-9); }
+
+.nv-front-masthead { text-align: center; padding: var(--nv-space-8) 0 var(--nv-space-5); }
+.nv-front-masthead__credit {
+  font-family: var(--nv-sans); font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.34em; text-transform: uppercase; color: var(--nv-sepia);
+  margin-bottom: var(--nv-space-3);
+}
+.nv-front-masthead__wordmark { font-size: clamp(2.8rem, 7vw, 4rem); }
+
+.nv-front__grid {
+  display: grid; grid-template-columns: 1fr; gap: var(--nv-space-7);
+  padding-top: var(--nv-space-6);
+  border-top: var(--nv-rule-heavy) double var(--nv-rule);
+}
+
+.nv-imprint { display: flex; flex-direction: column; }
+.nv-imprint__head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--nv-space-3); }
+.nv-imprint__name {
+  font-family: var(--nv-serif); font-weight: 500;
+  font-size: clamp(1.5rem, 3vw, 1.9rem); line-height: var(--nv-lh-tight);
+  letter-spacing: var(--nv-track-masthead); color: var(--nv-press-navy); margin: 0;
+}
+.nv-imprint__name em { font-style: italic; color: var(--nv-accent); font-weight: 500; }
+.nv-imprint__tagline {
+  font-family: var(--nv-serif); font-style: italic; font-size: 0.9rem; color: var(--nv-sepia);
+}
+.nv-imprint__rule { height: var(--nv-rule-heavy); background: var(--nv-accent); margin: var(--nv-space-4) 0 var(--nv-space-4); }
+
+.nv-teaser { display: flex; flex-direction: column; }
+.nv-teaser .nv-kicker { margin-bottom: var(--nv-space-3); }
+.nv-teaser__head { font-family: var(--nv-serif); font-weight: 500; font-size: 1.3rem; line-height: var(--nv-lh-headline); margin: 0 0 var(--nv-space-3); text-wrap: balance; }
+.nv-teaser__head a { color: var(--nv-press-navy); text-decoration: none; }
+.nv-teaser__head a:hover { color: var(--nv-accent); }
+.nv-teaser__dek { margin-bottom: var(--nv-space-4); }
+.nv-teaser__more {
+  margin-top: auto; font-family: var(--nv-sans); font-size: 0.66rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--nv-accent); text-decoration: none;
+}
+.nv-teaser__more:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* three imprint columns on wide viewports; stacked single column below */
+@media (min-width: 1024px) {
+  .nv-front__grid { grid-template-columns: repeat(3, 1fr); gap: var(--nv-space-6); }
+  .nv-front__grid > .nv-imprint:not(:first-child) {
+    border-left: var(--nv-hair) solid var(--nv-rule); padding-left: var(--nv-space-6);
+  }
+}
+
 /* ============================================================================
    Responsive
    ========================================================================== */

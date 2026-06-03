@@ -1,10 +1,28 @@
-import { redirect } from 'next/navigation'
+import type { Metadata } from 'next'
+import { HOUSE, MODE_ORDER } from '@/lib/modes'
+import { FrontMasthead, ImprintSection } from '@/components/front'
 
-// TODO(IA): the root is a placeholder redirect to /satire. The front page /
-// section index is blocked on an unresolved information-architecture decision
-// (one NexVigilant site with three sections vs. three imprints under The
-// Vigilant Press — SPEC-001 §9.3, house name undecided). Do not build it until
-// that ruling lands; ModeNav placement is tied to the same decision.
+export const metadata: Metadata = {
+  title: HOUSE.wordmark,
+  description: `${HOUSE.credit} — satire, critique and analysis from three imprints.`,
+}
+
+// IA(resolved): the root is The Vigilant Press cover — one house surface that
+// surfaces the three imprint sections (SPEC-001 §2), not a mixed feed. This
+// supersedes the prior placeholder 307 → /satire redirect.
 export default function Home() {
-  redirect('/satire')
+  return (
+    <main className="nv nv-front">
+      <div className="nv-shell">
+        <FrontMasthead />
+      </div>
+      <div className="nv-shell">
+        <div className="nv-front__grid">
+          {MODE_ORDER.map((mode) => (
+            <ImprintSection key={mode} mode={mode} />
+          ))}
+        </div>
+      </div>
+    </main>
+  )
 }
