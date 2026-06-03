@@ -67,11 +67,14 @@ tailwind.config.ts    # brand colors + type roles exposed as Tailwind tokens
 
 ## Notes & deferred items (carried from the design handoff)
 
-- **Scores are calibrated to NV-PUB-SPEC-003 (v1.0).** Each evidentiary score renders
+- **Scores are calibrated to NV-PUB-SPEC-003 (v1.1).** Each evidentiary score renders
   with its band (§5) and one-line derivation (§G1 no naked numbers); reasoning names the
   §4 verifiability gate where it applies; tags are drawn from the §6 controlled
   bias/fallacy vocabulary, each with its trigger. Band is derived from the value
-  (`scoreBand`) so the two cannot drift. The JSON-LD / ClaimReview mapping
+  (`scoreBand`) so the two cannot drift. Per v1.1, a registration record / conference
+  abstract is a *secondary report* (B1 cap 15, not the preprint cap) — the analysis
+  scorecard reflects this — and conflict-of-interest is a source-credibility finding
+  shown in the source annotation, never a §6 fallacy tag. The JSON-LD / ClaimReview mapping
   (NV-PUB-SPEC-005) is **still pending** — no structured data is emitted yet; wire
   `<script type="application/ld+json">` into `[mode]/page.tsx` when that spec lands
   (SPEC-003 §9 maps Evidence Quality → `reviewRating`, source credibility a separate

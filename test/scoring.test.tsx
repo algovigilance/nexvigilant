@@ -3,8 +3,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { EvidentiaryQuote } from '@/components/quotes'
 import { NV_MODES, NV_ARTICLES, MODE_ORDER, scoreBand } from '@/lib/modes'
 
-// SPEC-003 §6 controlled vocabulary (bias/fallacy taxonomy). "Conflict" is the
-// COI tag sanctioned by the spec's own worked example (§10a).
+// SPEC-003 v1.1 §6 controlled vocabulary (bias/fallacy taxonomy). Conflict-of-interest
+// was removed in v1.1 — it is an Instrument-A source-credibility finding, never a tag.
 const TAG_VOCAB = new Set([
   // cognitive biases
   'Confirmation', 'Availability', 'Anchoring', 'Survivorship', 'Cherry-picking',
@@ -12,8 +12,6 @@ const TAG_VOCAB = new Set([
   'Ad hominem', 'Straw man', 'False dichotomy', 'Appeal to authority (misused)',
   'Correlation≠causation', 'Unfalsifiable', 'Appeal to emotion', 'False urgency',
   'Hasty generalization',
-  // COI tag used in §10(a)
-  'Conflict',
 ])
 
 describe('SPEC-003 §5 — scoreBand', () => {

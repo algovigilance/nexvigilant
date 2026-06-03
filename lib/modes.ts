@@ -29,8 +29,9 @@ export interface ScoreItem {
   value: number
   // SPEC-001 §4.b/§8 + SPEC-003 §G1 (no naked numbers): a score never renders as a
   // bare figure — its band (§5) and one-line derivation are always visible.
-  // SPEC-003(resolved) v1.0: values + reasoning are calibrated to the rubric —
+  // SPEC-003(resolved) v1.1: values + reasoning are calibrated to the rubric —
   // §2 source credibility, §3 evidence quality, §4 verifiability gate, §7 calibration.
+  // COI is an Instrument-A source finding (shown in the source annotation), never a §6 tag.
   reasoning: string
 }
 
@@ -190,9 +191,9 @@ export const NV_ARTICLES: Record<Mode, Article> = {
       scores: [
         {
           label: 'Evidence quality',
-          value: 58,
+          value: 55,
           reasoning:
-            'Real effect, but on a secondary endpoint (progression-free, not overall survival) and modest in absolute terms — 8.1 vs 5.9 months. Verifiability gate (§4): the figure reaches us as a sponsor topline, traced to a registration record and abstract but not peer-reviewed — the trial’s tier is capped because the reader is not reading the trial.',
+            'Real effect, but on a secondary endpoint (progression-free, not overall survival) and modest in absolute terms — 8.1 vs 5.9 months. Verifiability gate (§4): the result reaches us only via a sponsor topline traced to a trial-registration record and conference abstract — not an independently published paper, so it is a secondary report (B1 capped at 15), not a preprint. The reader is not reading the trial; with a weak comparator on top, the honest band is Mixed.',
         },
         {
           label: 'Source credibility',
@@ -269,9 +270,9 @@ export const NV_ARTICLES: Record<Mode, Article> = {
             '“Clinically proven” borrows the authority of a controlled trial the open-label, n=22, self-reported study cannot supply.',
         },
         {
-          name: 'Conflict',
+          name: 'Hasty generalization',
           trigger:
-            'The only cited evidence is manufacturer-funded with no independent replication; the disclaimer absorbs the liability the impression creates.',
+            'Generalizes an eight-week, open-label, n=22 self-report into a categorical “clinically proven” claim.',
         },
       ],
     },
