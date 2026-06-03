@@ -27,15 +27,42 @@ export interface Author {
 export interface ScoreItem {
   label: string
   value: number
-  // SPEC-001 §4.b/§8: a score never renders as a naked number — its derivation
-  // must be visible. One-line reasoning per dimension.
-  // TODO(SPEC-003): values + reasoning are illustrative until the scoring rubric lands.
+  // SPEC-001 §4.b/§8 + SPEC-003 §G1 (no naked numbers): a score never renders as a
+  // bare figure — its band (§5) and one-line derivation are always visible.
+  // SPEC-003(resolved) v1.1: values + reasoning are calibrated to the rubric —
+  // §2 source credibility, §3 evidence quality, §4 verifiability gate, §7 calibration.
+  // COI is an Instrument-A source finding (shown in the source annotation), never a §6 tag.
   reasoning: string
+}
+
+// SPEC-003 §5: every published score carries its band label, derived from the value
+// so the number and its band can never drift apart. §9 maps this to
+// ClaimReview.alternateName (the mapping itself stays in SPEC-005, still blocked).
+export type ScoreBand =
+  | 'High'
+  | 'Substantial'
+  | 'Mixed / caution'
+  | 'Low'
+  | 'Not credible / unsupported'
+
+export function scoreBand(value: number): ScoreBand {
+  if (value >= 81) return 'High'
+  if (value >= 61) return 'Substantial'
+  if (value >= 41) return 'Mixed / caution'
+  if (value >= 21) return 'Low'
+  return 'Not credible / unsupported'
+}
+
+// SPEC-003 §6: a tag is drawn from the controlled bias/fallacy vocabulary and renders
+// as name + the one-line trigger that justified it — never a bare label.
+export interface Tag {
+  name: string
+  trigger: string
 }
 
 export type PullData =
   | { kind: 'satirical'; quote: string; attribution: string }
-  | { kind: 'evidentiary'; claim: string; cite: string; scores: ScoreItem[]; tags: string[] }
+  | { kind: 'evidentiary'; claim: string; cite: string; scores: ScoreItem[]; tags: Tag[] }
 
 export interface Article {
   section: string
@@ -164,18 +191,29 @@ export const NV_ARTICLES: Record<Mode, Article> = {
       scores: [
         {
           label: 'Evidence quality',
-          value: 58,
+          value: 55,
           reasoning:
-            'Real effect on a secondary endpoint (progression-free, not overall survival); modest in absolute terms — 8.1 vs 5.9 months.',
+            'Real effect, but on a secondary endpoint (progression-free, not overall survival) and modest in absolute terms — 8.1 vs 5.9 months. Verifiability gate (§4): the result reaches us only via a sponsor topline traced to a trial-registration record and conference abstract — not an independently published paper, so it is a secondary report (B1 capped at 15), not a preprint. The reader is not reading the trial; with a weak comparator on top, the honest band is Mixed.',
         },
         {
           label: 'Source credibility',
           value: 41,
           reasoning:
-            'Sponsor press release, not peer-reviewed; comparator arm below the current first-line standard.',
+            'Sponsor (investor) communication: a direct stake and promotional purpose cap independence; the figure is at least traceable to the trial’s registration record rather than asserted alone.',
         },
       ],
-      tags: ['Secondary endpoint', 'Weak comparator'],
+      tags: [
+        {
+          name: 'Cherry-picking',
+          trigger:
+            'Promotes a relative reduction on a secondary endpoint as an overall “40% survival benefit”; the absolute difference is 8.1 vs 5.9 months.',
+        },
+        {
+          name: 'Hasty generalization',
+          trigger:
+            'Generalizes a benefit measured against an outdated comparator (not first-line since 2021) into a definitive survival claim.',
+        },
+      ],
     },
   },
   critique: {
@@ -216,16 +254,27 @@ export const NV_ARTICLES: Record<Mode, Article> = {
           label: 'Evidence quality',
           value: 19,
           reasoning:
-            'Open-label, n=22, self-reported primary outcome, no control arm — placebo response indistinguishable from effect.',
+            'Open-label, n=22, self-reported primary outcome, no control arm — the configuration in which placebo response is least distinguishable from a true effect; no design here can earn “proven.”',
         },
         {
           label: 'Source credibility',
           value: 27,
           reasoning:
-            'Manufacturer-funded, no independent replication; regulatory non-evaluation disclosed only in fine print.',
+            'Manufacturer-funded sole study with no independent replication; regulatory non-evaluation disclosed only in the smallest type the layout permits.',
         },
       ],
-      tags: ['Open-label', 'Conflict of interest'],
+      tags: [
+        {
+          name: 'Appeal to authority (misused)',
+          trigger:
+            '“Clinically proven” borrows the authority of a controlled trial the open-label, n=22, self-reported study cannot supply.',
+        },
+        {
+          name: 'Hasty generalization',
+          trigger:
+            'Generalizes an eight-week, open-label, n=22 self-report into a categorical “clinically proven” claim.',
+        },
+      ],
     },
   },
 }
@@ -252,6 +301,10 @@ export const HOUSE = {
   wordmark: 'The Vigilant Press',
   tagline: 'Empowerment Through Vigilance',
   credit: 'A NexVigilant publication',
+  // SPEC-005 §1: the legal publisher entity and the canonical site URL. The brand
+  // shown to readers is `wordmark`; `publisher` is the Organization legal name.
+  publisher: 'NexVigilant, LLC',
+  url: 'https://www.thevigilantpress.com',
 }
 
 // Canonical imprint order for the cover (satire → critique → analysis).

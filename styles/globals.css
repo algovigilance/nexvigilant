@@ -333,6 +333,9 @@ html, body { margin: 0; background: var(--nv-newsprint); }
   font-family: var(--nv-sans); font-size: 0.6rem; font-weight: 600;
   letter-spacing: 0.12em; text-transform: uppercase; color: var(--nv-sepia);
 }
+/* SPEC-003 §5: band label sits with the dimension label, in press-navy for AA
+   contrast on Newsprint (the per-mode accents do not all clear 4.5:1 at this size). */
+.nv-score__band { color: var(--nv-press-navy); font-weight: 700; }
 .nv-score__reasoning {
   font-family: var(--nv-sans); font-style: normal; font-size: 0.72rem;
   line-height: 1.4; color: var(--nv-sepia); margin: 0; max-width: 28rem;
@@ -341,12 +344,21 @@ html, body { margin: 0; background: var(--nv-newsprint); }
   display: flex; flex-wrap: wrap; gap: var(--nv-space-2);
   margin-top: var(--nv-space-4);
 }
+/* SPEC-003 §6: each tag renders as name + the one-line trigger that justified it,
+   so the tag is stacked (label over trigger), not a bare nowrap chip. */
 .nv-tag {
-  font-family: var(--nv-sans); font-size: 0.64rem; font-weight: 600;
-  letter-spacing: 0.06em; color: var(--nv-ink);
-  padding: 0.28em 0.6em; border-radius: 1px;
+  display: flex; flex-direction: column; gap: 2px;
+  flex: 1 1 15rem; max-width: 22rem;
+  font-family: var(--nv-sans);
+  padding: 0.4em 0.65em; border-radius: 1px;
   box-shadow: inset 0 0 0 1px var(--nv-rule); background: var(--nv-newsprint);
-  white-space: nowrap;
+}
+.nv-tag__name {
+  font-size: 0.64rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--nv-ink);
+}
+.nv-tag__trigger {
+  font-size: 0.7rem; line-height: 1.35; font-weight: 400; color: var(--nv-sepia);
 }
 
 /* ---- Figure --------------------------------------------------------------- */

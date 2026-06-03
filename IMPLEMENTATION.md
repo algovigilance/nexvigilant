@@ -11,8 +11,8 @@ brand spec, content fundamentals, and visual foundations).
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000  → redirects to /satire
-npm run build    # static export of all three mode routes
+npm run dev      # http://localhost:3000  → The Vigilant Press cover (front page)
+npm run build    # static front page + all three mode routes
 ```
 
 ## Routes
@@ -27,14 +27,15 @@ disclaimer change per mode.
 | `/critique` | The Black Box | Ink `#1C1812` (heavy 8px warning box) | Evidentiary (claim + cite + scorecard) |
 | `/analysis` | The Signal | Signal Blue `#1E3A5F` | Evidentiary (claim + cite + scorecard) |
 
-`/` redirects to `/satire`. Each route is statically generated via `generateStaticParams`.
+`/` is the **The Vigilant Press cover** (front page) surfacing the three imprint sections;
+the mode routes are statically generated via `generateStaticParams`.
 
 ## Structure
 
 ```
 app/
   layout.tsx          # root html/body, imports globals.css
-  page.tsx            # redirect to /satire
+  page.tsx            # The Vigilant Press cover (front page) + WebSite JSON-LD
   [mode]/page.tsx     # the article page — validates mode, composes all components
 components/
   masthead.tsx        # ModeBadge, ModeNav, EditionStrip, Nameplate, CompoundRule
@@ -67,10 +68,22 @@ tailwind.config.ts    # brand colors + type roles exposed as Tailwind tokens
 
 ## Notes & deferred items (carried from the design handoff)
 
-- **Scores are illustrative.** The scoring rubric (NV-PUB-SPEC-003) and JSON-LD /
-  ClaimReview mapping (NV-PUB-SPEC-005) were not provided, so no structured data is
-  emitted yet. Wire `<script type="application/ld+json">` into `[mode]/page.tsx` when
-  those specs land.
+- **Scores are calibrated to NV-PUB-SPEC-003 (v1.1).** Each evidentiary score renders
+  with its band (§5) and one-line derivation (§G1 no naked numbers); reasoning names the
+  §4 verifiability gate where it applies; tags are drawn from the §6 controlled
+  bias/fallacy vocabulary, each with its trigger. Band is derived from the value
+  (`scoreBand`) so the two cannot drift. Per v1.1, a registration record / conference
+  abstract is a *secondary report* (B1 cap 15, not the preprint cap) — the analysis
+  scorecard reflects this — and conflict-of-interest is a source-credibility finding
+  shown in the source annotation, never a §6 fallacy tag.
+- **Structured data is emitted per NV-PUB-SPEC-005 (v1.0).** Each page server-renders one
+  `<script type="application/ld+json">` built by `lib/jsonld.ts` from `NV_MODES`/`NV_ARTICLES`
+  (no hand-authored JSON-LD). Satire → `Article` + `genre:"Satire"` (never `NewsArticle`, zero
+  `ClaimReview`); critique → `OpinionNewsArticle` and analysis → `AnalysisNewsArticle`, each with
+  one `ClaimReview` whose `reviewRating` is the on-page **gated Evidence Quality** score (band as
+  `alternateName`); source credibility is not folded in (§4/§7.3, on-page only). `/` emits a single
+  minimal `WebSite` node — no `CollectionPage`/`ItemList` until a real article index exists (§5/§7.1).
+  Author `Person.url` is omitted until `/author/{slug}` pages exist (§7.2).
 - **Hedcuts** are the procedurally generated stipple marks from the handoff; replace
   with real author portraits in production.
 - **Inline figures** ship as flat placeholders (`ArticleFigure`) — supply real editorial

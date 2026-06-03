@@ -5,6 +5,7 @@ import { ModeNav, EditionStrip, Nameplate, CompoundRule } from '@/components/mas
 import { ArticleHeader, Byline } from '@/components/article'
 import { ArticleBody } from '@/components/article-body'
 import { ArticleFooter, RelatedRail } from '@/components/footer'
+import { buildArticleLd, serializeJsonLd } from '@/lib/jsonld'
 
 const VALID_MODES: Mode[] = ['satire', 'critique', 'analysis']
 
@@ -41,15 +42,14 @@ export default function ArticlePage({
 
   return (
     <div className="nv nv-page" data-mode={mode}>
-      {/*
-        TODO(SPEC-005): emit JSON-LD here per §6 structured-data table —
-        satire → NewsArticle + satire:true honesty fields;
-        critique → OpinionNewsArticle + ClaimReview per evidentiary quote;
-        analysis → AnalysisNewsArticle + ClaimReview (reviewRating = Evidence
-        Quality, bestRating 100 / worstRating 0; source credibility annotated
-        separately). Blocked on NV-PUB-SPEC-005 (mapping not yet provided).
-        <script type="application/ld+json" /> goes here.
-      */}
+      {/* SPEC-005 §2–4: server-emitted JSON-LD. satire → Article + genre:Satire
+          (never NewsArticle, zero ClaimReview); critique → OpinionNewsArticle and
+          analysis → AnalysisNewsArticle, each with one ClaimReview whose
+          reviewRating is the on-page gated Evidence Quality score. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildArticleLd(mode, article)) }}
+      />
       <ModeNav current={mode} />
 
       <div className="nv-shell">
