@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { PullQuoteForMode } from '@/components/quotes'
-import { NV_MODES, NV_ARTICLES } from '@/lib/modes'
+import { NV_MODES, featuredArticle } from '@/lib/modes'
 
 // quotes.tsx is pure (type-only imports) so it renders to static markup with no
 // next/* stubs. This pins the discriminated-union selector: `kind` decides form.
 describe('PullQuoteForMode discriminated union', () => {
   it('renders the plain editorial form for kind="satirical"', () => {
     const html = renderToStaticMarkup(
-      <PullQuoteForMode cfg={NV_MODES.satire} pull={NV_ARTICLES.satire.pull} />,
+      <PullQuoteForMode cfg={NV_MODES.satire} pull={featuredArticle('satire').pull} />,
     )
     expect(html).toContain('class="nv-pullquote"')
     expect(html).toContain('<figcaption>')
@@ -22,7 +22,7 @@ describe('PullQuoteForMode discriminated union', () => {
     'renders the evidentiary form for kind="evidentiary" (%s)',
     (mode) => {
       const html = renderToStaticMarkup(
-        <PullQuoteForMode cfg={NV_MODES[mode]} pull={NV_ARTICLES[mode].pull} />,
+        <PullQuoteForMode cfg={NV_MODES[mode]} pull={featuredArticle(mode).pull} />,
       )
       expect(html).toContain('class="nv-evidence"')
       expect(html).toContain('Claim under review')

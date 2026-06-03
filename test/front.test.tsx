@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 // The front page is pure server components with plain <a> and no next/link or
 // next/image in its graph, so it renders to static markup with no stubs.
 import Home from '@/app/page'
-import { NV_MODES, NV_ARTICLES, MODE_ORDER, HOUSE } from '@/lib/modes'
+import { NV_MODES, featuredArticle, MODE_ORDER, HOUSE } from '@/lib/modes'
 
 const html = renderToStaticMarkup(<Home />)
 
@@ -33,8 +33,8 @@ describe('front page (/)', () => {
 
   it('teasers + nameplate marks are sourced from NV_ARTICLES/NV_MODES (no duplicated copy)', () => {
     for (const mode of MODE_ORDER) {
-      // teaser headline is the exact article headline
-      expect(html).toContain(NV_ARTICLES[mode].headline)
+      // teaser headline is the exact featured-article headline
+      expect(html).toContain(featuredArticle(mode).headline)
       // imprint nameplate-mark italicizes the distinguishing last word
       const last = NV_MODES[mode].imprint.split(' ').pop()!
       expect(html).toContain(`<em>${last}</em>`)

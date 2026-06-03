@@ -3,14 +3,22 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import {
   buildArticleLd,
   buildSiteLd,
+  buildModeIndexLd,
   serializeJsonLd,
   evidenceQualityScore,
 } from '@/lib/jsonld'
 import { EvidentiaryQuote } from '@/components/quotes'
-import { HOUSE, NV_ARTICLES, scoreBand, type Mode } from '@/lib/modes'
+import {
+  HOUSE,
+  featuredArticle,
+  getArticles,
+  scoreBand,
+  MODE_ORDER,
+  type Mode,
+} from '@/lib/modes'
 
 type Node = Record<string, any>
-const graphOf = (mode: Mode): Node[] => buildArticleLd(mode, NV_ARTICLES[mode])['@graph']
+const graphOf = (mode: Mode): Node[] => buildArticleLd(mode, featuredArticle(mode))['@graph']
 const claimReviews = (g: Node[]) => g.filter((n) => n['@type'] === 'ClaimReview')
 
 describe('SPEC-005 §3 — satire honesty encoding', () => {
@@ -43,7 +51,7 @@ describe('SPEC-005 §2/§4 — critique & analysis ClaimReview', () => {
   it.each(['critique', 'analysis'] as const)(
     '%s reviewRating == the on-page gated Evidence Quality score (G1 binding)',
     (mode) => {
-      const pull = NV_ARTICLES[mode].pull
+      const pull = featuredArticle(mode).pull
       if (pull.kind !== 'evidentiary') throw new Error('expected evidentiary')
       const evidence = evidenceQualityScore(pull)!
       const rating = claimReviews(graphOf(mode))[0].reviewRating
@@ -74,7 +82,7 @@ describe('SPEC-005 §2/§4 — critique & analysis ClaimReview', () => {
   it.each(['critique', 'analysis'] as const)(
     '%s ClaimReview reviews the quote against the cited source',
     (mode) => {
-      const pull = NV_ARTICLES[mode].pull
+      const pull = featuredArticle(mode).pull
       if (pull.kind !== 'evidentiary') throw new Error('expected evidentiary')
       const review = claimReviews(graphOf(mode))[0]
       expect(review.claimReviewed).toBe(pull.claim)
@@ -105,7 +113,7 @@ describe('SPEC-005 §6 — serialized JSON-LD is valid and script-safe', () => {
   it.each(['satire', 'critique', 'analysis'] as const)(
     '%s document parses back to the same object',
     (mode) => {
-      const doc = buildArticleLd(mode, NV_ARTICLES[mode])
+      const doc = buildArticleLd(mode, featuredArticle(mode))
       const json = serializeJsonLd(doc)
       expect(json).not.toContain('</script')
       expect(JSON.parse(json)).toEqual(doc)
@@ -115,5 +123,43 @@ describe('SPEC-005 §6 — serialized JSON-LD is valid and script-safe', () => {
   it('site document parses back to the same object', () => {
     const site = buildSiteLd()
     expect(JSON.parse(serializeJsonLd(site))).toEqual(site)
+  })
+})
+
+describe('SPEC-005 §2 — multi-article model (every article, not just the lead)', () => {
+  it.each(MODE_ORDER)('every %s article builds with the right @type + slug URL', (mode) => {
+    for (const article of getArticles(mode)) {
+      const g = buildArticleLd(mode, article)['@graph']
+      const node = g[0]
+      // satire is Article + zero ClaimReview; critique/analysis are NewsArticle subtypes
+      expect(node['@type']).not.toBe('NewsArticle')
+      if (mode === 'satire') expect(claimReviews(g)).toHaveLength(0)
+      // the article node URL is the stable per-article /[mode]/[slug]
+      expect(node.url).toContain(`/${mode}/${article.slug}`)
+    }
+  })
+})
+
+describe('SPEC-005 §5/§7.1 — per-mode index CollectionPage + ItemList', () => {
+  it.each(MODE_ORDER)('%s index lists every article as an ordered ListItem', (mode) => {
+    const articles = getArticles(mode)
+    const doc = buildModeIndexLd(mode, articles) as Node
+    expect(doc['@type']).toBe('CollectionPage')
+    const list = doc.mainEntity as Node
+    expect(list['@type']).toBe('ItemList')
+    const items = list.itemListElement as Node[]
+    expect(items).toHaveLength(articles.length)
+    items.forEach((item, i) => {
+      expect(item['@type']).toBe('ListItem')
+      expect(item.position).toBe(i + 1)
+      expect(item.url).toContain(`/${mode}/${articles[i].slug}`)
+      expect(item.name).toBe(articles[i].headline)
+    })
+    expect(JSON.parse(serializeJsonLd(doc))).toEqual(doc)
+  })
+
+  it('the satire index now carries two items (new piece added)', () => {
+    const list = buildModeIndexLd('satire', getArticles('satire')).mainEntity as Node
+    expect((list.itemListElement as Node[]).length).toBe(2)
   })
 })
