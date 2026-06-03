@@ -1,4 +1,5 @@
-import type { PullData, ModeConfig } from '@/lib/modes'
+import type { PullData, ModeConfig, Tag } from '@/lib/modes'
+import { scoreBand } from '@/lib/modes'
 
 export function PullQuote({
   quote,
@@ -16,8 +17,10 @@ export function PullQuote({
   )
 }
 
-// SPEC-001 §4.b "unit of scrutiny" / §8 "no naked numbers": each dimension score
-// renders WITH its label and a one-line derivation, never as a bare figure.
+// SPEC-001 §4.b "unit of scrutiny" / §8 + SPEC-003 §G1 "no naked numbers": each
+// dimension score renders WITH its band (§5), label and a one-line derivation —
+// never as a bare figure. The band is derived from the value (scoreBand), so the
+// number and its band cannot drift.
 function Score({
   label,
   value,
@@ -27,6 +30,7 @@ function Score({
   value: number
   reasoning: string
 }) {
+  const band = scoreBand(value)
   return (
     <div className="nv-score">
       <div className="nv-score__value">
@@ -34,7 +38,9 @@ function Score({
         <span className="nv-score__max">/100</span>
       </div>
       <div className="nv-score__detail">
-        <div className="nv-score__label">{label}</div>
+        <div className="nv-score__label">
+          {label} <span className="nv-score__band">· {band}</span>
+        </div>
         <p className="nv-score__reasoning">{reasoning}</p>
       </div>
     </div>
@@ -50,7 +56,7 @@ export function EvidentiaryQuote({
   claim: string
   cite: string
   scores: { label: string; value: number; reasoning: string }[]
-  tags: string[]
+  tags: Tag[]
 }) {
   return (
     <figure className="nv-evidence">
@@ -65,8 +71,9 @@ export function EvidentiaryQuote({
       {tags.length > 0 ? (
         <div className="nv-evidence__tags">
           {tags.map((t) => (
-            <span className="nv-tag" key={t}>
-              {t}
+            <span className="nv-tag" key={t.name}>
+              <span className="nv-tag__name">{t.name}</span>
+              <span className="nv-tag__trigger">{t.trigger}</span>
             </span>
           ))}
         </div>
